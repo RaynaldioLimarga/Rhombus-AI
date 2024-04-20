@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}
+  Data Visualizations
+{% endblock %}
+
+{% block content %}
+  {% include 'data_visualizations/includes/header.html' %}
+
+  <div class="row task_select">
+    <div class="col-md-2">
+    Select Dataset: 
+    </div>
+    <select class="form-select col-md-3" onchange="show_task()" id="task">
+      {% for task_option in alltasks %}
+        <option value="{{ task_option.id }}" {% if task == task_option.id %}selected{% endif %}>{{ task_option.label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2">
+      Select Plot: 
+    </div>
+    <select class="form-select col-md-3" onchange="show_plot()" id="plot">
+      <option value="1" {% if plot_id == 1 %}selected{% endif %}>Time-based Plot</option>
+      <option value="2" {% if plot_id == 2 %}selected{% endif %}>Category Bar Graph</option>
+      <option value="3" {% if plot_id == 3 %}selected{% endif %}>Scatter Plot</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <img src="data:image/png;base64,{{ plot }}" class="img-fluid" width="80%"/>
+  </div>
+
+  {% for col, value in data_types.items %}
+    <div class="row">
+      <h4>Column {{ col }} is {% widthratio value.1 1 100 %}% likely to be {{ value.0 }}</h4>
+    </div>
+  {% endfor %}
+
+  <table class="table table-striped table-sm">
+    <thead class="thead-dark">
+      <tr>
+        {% for key in dataframe %}
+          <th scope="col">{{ key }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for index, row in dataframe.iterrows %}
+        <tr>
+          {% for cell in row %}
+            <td>{{cell}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script>
+    function show_task() {
+      var d = document.getElementById("task").value;
+      window.location.replace("task/"+d)
+    }
+
+    function show_plot() {
+      var d = document.getElementById("plot").value;
+      window.location.replace("plot/"+d);
+    }
+  </script>
+{% endblock %}

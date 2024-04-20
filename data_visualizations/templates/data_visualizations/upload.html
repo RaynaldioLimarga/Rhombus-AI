@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}
+  Data Visualizations
+{% endblock %}
+
+{% block content %}
+{% include "data_visualizations/includes/header.html" %}
+
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col">
+        <input type="text" class="form-control" placeholder="Label" name="label" aria-label="Label" required />
+        </div>
+        <div class="col">
+        <input class="form-control" type="file" name="file" id="formFile" required />
+        </div>
+        <div class="col">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
